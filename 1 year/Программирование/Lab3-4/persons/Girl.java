@@ -51,7 +51,7 @@ public class Girl extends Person {
         if (!(other instanceof Girl girl)) return; 
 
         if (!girl.knowsNews) {
-            System.out.print(this.getName() + " рассказала новость " + girl.getName() + "!");
+            System.out.print(this.getName() + " рассказала новость " + girl.getName() + ". ");
             girl.learnNews();  
             girl.act(); 
         }
@@ -100,7 +100,7 @@ public class Girl extends Person {
         else{
             inventory.add(item);
             currLoad += item.weight();
-            System.out.print(" " + getName() + " взяла " + item.name()+ ".");
+            System.out.print(getName() + " взяла " + item.name()+ ".");
             return true;
         }
     }
