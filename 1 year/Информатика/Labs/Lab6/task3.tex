@@ -1,0 +1,312 @@
+Антон, [29.12.2025 21:56]
+\documentclass[10pt, onecolumn]{article}
+
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usetikzlibrary{angles,quotes,calc}
+\usepackage[english,russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[left=5mm, top=20mm, right=5mm, bottom=10mm, nofoot]{geometry}
+\usepackage{tempora}
+\usepackage{newtxmath}
+\usepackage{multicol}
+\usepackage{graphicx}
+
+\definecolor{triRed}{RGB}{200, 60, 20}
+\definecolor{triYellow}{RGB}{245, 170, 20}
+\definecolor{triBlue}{RGB}{30, 80, 160}
+\definecolor{textBlue}{RGB}{0, 50, 150}
+
+\date{}
+
+\setlength{\columnsep}{-3cm}
+
+\begin{document}
+
+\newcommand{\smallTri}{
+    \begin{tikzpicture}[baseline=-2pt, scale=0.25]
+        \coordinate (A) at (0.5, 1.3); \coordinate (C) at (0, 0); \coordinate (B) at (1, 0);
+        \draw[line width=1.5pt, triRed] (A) -- (C);
+        \draw[line width=1.5pt, triRed] (A) -- (B);
+        \draw[line width=1.5pt, black] (C) -- (B);
+        \node[scale=0.6, textBlue, above] at (A) {A};
+        \node[scale=0.6, textBlue, left] at (C) {C};
+        \node[scale=0.6, textBlue, right] at (B) {B};
+    \end{tikzpicture}
+}
+
+\newcommand{\lineRed}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triRed] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {A}; \node[scale=0.5, black, above] at (1.5,0) {B};
+    \end{tikzpicture}
+}
+\newcommand{\lineRedAC}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triRed] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {A}; \node[scale=0.5, black, above] at (1.5,0) {C};
+    \end{tikzpicture}
+}
+\newcommand{\lineBlueBE}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triBlue] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {B}; \node[scale=0.5, black, above] at (1.5,0) {E};
+    \end{tikzpicture}
+}
+\newcommand{\lineBlueCD}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triBlue] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {C}; \node[scale=0.5, black, above] at (1.5,0) {D};
+    \end{tikzpicture}
+}
+\newcommand{\lineYellowBD}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triYellow] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {B}; \node[scale=0.5, black, above] at (1.5,0) {D};
+    \end{tikzpicture}
+}
+\newcommand{\lineYellowCE}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triYellow] (0,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {C}; \node[scale=0.5, black, above] at (1.5,0) {E};
+    \end{tikzpicture}
+}
+\newcommand{\lineSplitAD}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triRed] (0,0) -- (0.6,0);
+        \draw[line width=2pt, triYellow] (0.9,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {A}; \node[scale=0.5, black, above] at (1.5,0) {D};
+    \end{tikzpicture}
+}
+\newcommand{\lineSplitAE}{
+    \begin{tikzpicture}[baseline=-2.5pt, scale=0.3]
+        \draw[line width=2pt, triRed] (0,0) -- (0.6,0);
+        \draw[line width=2pt, triYellow] (0.9,0) -- (1.5,0);
+        \node[scale=0.5, black, above] at (0,0) {A}; \node[scale=0.5, black, above] at (1.5,0) {E};
+    \end{tikzpicture}
+}
+
+Антон, [29.12.2025 21:56]
+\newcommand{\iconSectorLeft}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (V) at (0,0);
+        \fill[triBlue] (V) -- (10:1.3) arc (10:60:1.3) -- cycle;
+        \fill[triYellow] (V) -- (10:1.3) arc (10:-40:1.3) -- cycle;
+        \node[scale=0.5, above] at (60:1.3) {A};
+        \node[scale=0.5, left] at (V) {C};
+        \node[scale=0.5, right] at (-40:1.3) {D};
+    \end{tikzpicture}
+}
+\newcommand{\iconSectorRight}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (V) at (0,0);
+        \fill[triBlue] (V) -- (170:1.3) arc (170:120:1.3) -- cycle;
+        \fill[triYellow] (V) -- (170:1.3) arc (170:220:1.3) -- cycle;
+        \node[scale=0.5, above] at (120:1.3) {A};
+        \node[scale=0.5, right] at (V) {B};
+        \node[scale=0.5, left] at (220:1.3) {E};
+    \end{tikzpicture}
+}
+
+\newcommand{\iconTriBotLeft}{
+    \begin{tikzpicture}[baseline=-2pt, scale=0.25]
+        \coordinate (C) at (1.2, 1); \coordinate (E) at (0, 0); \coordinate (B) at (2.5, 0.5);
+        \draw[line width=2pt, triYellow] (C) -- (E);
+        \draw[line width=2pt, triBlue] (B) -- (E);
+        \draw[line width=2pt, black] (C) -- (B); 
+        \node[scale=0.5, above] at (C) {C}; \node[scale=0.5, left] at (E) {E}; \node[scale=0.5, right] at (B) {B};
+    \end{tikzpicture}
+}
+\newcommand{\iconTriBotRight}{
+    \begin{tikzpicture}[baseline=-2pt, scale=0.25]
+        \coordinate (B) at (-1.2, 1); \coordinate (D) at (0, 0); \coordinate (C) at (-2.5, 0.5);
+        \draw[line width=2pt, triYellow] (B) -- (D);
+        \draw[line width=2pt, triBlue] (C) -- (D);
+        \draw[line width=2pt, black] (B) -- (C);
+        \node[scale=0.5, above] at (B) {B}; \node[scale=0.5, right] at (D) {D}; \node[scale=0.5, left] at (C) {C};
+    \end{tikzpicture}
+}
+
+\newcommand{\angleA}{
+    \begin{tikzpicture}[baseline=-2pt, scale=0.3]
+        \coordinate (A) at (0.5, 1); \coordinate (L) at (0,0); \coordinate (R) at (1,0);
+        \draw pic[fill=black, angle radius=4mm] {angle = L--A--R};
+        \node[scale=0.5, above] at (A) {A};
+    \end{tikzpicture}
+}
+\newcommand{\angleRedLeft}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (E) at (0,0);
+        \fill[triRed] (E) -- (20:1.3) arc (20:50:1.3) -- cycle;
+        \node[scale=0.5, left] at (E) {E}; 
+        \node[scale=0.5, right] at (20:1.3) {B};
+        \node[scale=0.5, above] at (50:1.3) {C};
+    \end{tikzpicture}
+}
+\newcommand{\angleRedRight}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (D) at (0,0);
+        \fill[triRed] (D) -- (160:1.3) arc (160:130:1.3) -- cycle;
+        \node[scale=0.5, right] at (D) {D};
+        \node[scale=0.5, left] at (160:1.3) {B};
+        \node[scale=0.5, above] at (130:1.3) {C};
+    \end{tikzpicture}
+}
+
+\newcommand{\angleYellowArcLeft}{
+    \begin{tikzpicture}[baseline=-5pt, scale=0.25]
+        \coordinate (V) at (0, 1); \coordinate (L) at (-0.5, 0); \coordinate (R) at (1, 0.5);
+        \draw[line width=0.5pt] (V) -- (L); \draw[line width=0.5pt] (V) -- (R);
+        \draw pic[draw=triYellow, line width=1.5pt, angle radius=3mm] {angle = L--V--R};
+        \node[scale=0.5, above] at (V) {C}; \node[scale=0.5, left] at (L) {E}; \node[scale=0.5, right] at (R) {B};
+    \end{tikzpicture}
+}
+\newcommand{\angleYellowArcRight}{
+    \begin{tikzpicture}[baseline=-5pt, scale=0.25]
+        \coordinate (V) at (0, 1); \coordinate (L) at (-1, 0.5); \coordinate (R) at (0.5, 0);
+        \draw[line width=0.5pt] (V) -- (L); \draw[line width=0.5pt] (V) -- (R);
+        \draw pic[draw=triYellow, line width=1.5pt, angle radius=3mm] {angle = L--V--R};
+        \node[scale=0.5, above] at (V) {B}; \node[scale=0.5, left] at (L) {C}; \node[scale=0.5, right] at (R) {D};
+    \end{tikzpicture}
+}
+
+Антон, [29.12.2025 21:56]
+\newcommand{\angleYellowFillLeft}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (D) at (0,0);
+        \fill[triYellow] (D) -- (150:1.3) arc (150:175:1.3) -- cycle;
+        \node[scale=0.5, right] at (D) {D}; 
+        \node[scale=0.5, above] at (150:1.4) {B};
+        \node[scale=0.5, left] at (175:1.4) {C};
+    \end{tikzpicture}
+}
+\newcommand{\angleYellowFillRight}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (E) at (0,0);
+        \fill[triYellow] (E) -- (30:1.3) arc (30:5:1.3) -- cycle;
+        \node[scale=0.5, left] at (E) {E}; 
+        \node[scale=0.5, above] at (30:1.4) {B};
+        \node[scale=0.5, right] at (5:1.4) {C};
+    \end{tikzpicture}
+}
+
+\newcommand{\angleBlueLeftFilled}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (V) at (0,0);
+        \fill[triBlue] (V) -- (0:1.3) arc (0:60:1.3) -- cycle;
+        \node[scale=0.5, above] at (60:1.3) {A};
+        \node[scale=0.5, left] at (V) {C};
+        \node[scale=0.5, right] at (0:1.3) {B};
+    \end{tikzpicture}
+}
+\newcommand{\angleBlueRightFilled}{
+    \begin{tikzpicture}[baseline=-3pt, scale=0.25]
+        \coordinate (V) at (0,0);
+        \fill[triBlue] (V) -- (180:1.3) arc (180:120:1.3) -- cycle;
+        \node[scale=0.5, above] at (120:1.3) {A};
+        \node[scale=0.5, right] at (V) {B};
+        \node[scale=0.5, left] at (180:1.3) {C};
+    \end{tikzpicture}
+}
+
+\begin{center}
+\Large{
+    \noindent\hspace*{-5cm} КНИГА I ПРЕДЛ. V. ТЕОРЕМА \hspace{2cm} \emph{29}
+}
+\end{center}
+
+\\
+\begin{multicols}{2}
+    
+    \setlength{\columnsep}{-5cm}
+    
+    \begin{multicols}{2}
+        \includegraphics[width=2.5cm, height=2.5cm ]{letter.png}
+    
+        \vfill\null
+        \columnbreak
+    
+        \noindent \textit{глы при основании любого равнобедренного треугольника \smallTri\ равны между собой и по продолжении равных сторон углы под основанием будут равны между собой.}
+    \end{multicols}
+
+    \begin{center}
+        \par Продлим \lineRed\ и \lineRedAC\ (пост. II), \\
+    возьмем \lineYellowBD\ = \lineYellowCE\ (пр. I.3); \\
+    проведем \lineBlueBE\ и \lineBlueCD.
+
+    \vspace{0.3cm}
+    
+        Тогда в \iconSectorLeft\ и \iconSectorRight \\ 
+        \vspace{0.2cm}
+        получим \lineSplitAD\ = \lineSplitAE\ (конст.), \\
+        \vspace{0.2cm}
+        \angleA\ общий обоим, \\
+        \vspace{0.2cm}
+        и \lineRed\ = \lineRedAC\ (гип.) \\
+        \vspace{0.2cm}
+        $\therefore$ \iconSectorLeft\ = \iconSectorRight, \lineBlueBE\ = \lineBlueCD \\
+        \vspace{0.2cm}
+        и \angleRedRight\ = \angleRedLeft\ (пр. I.4).
+        
+        \vspace{0.5cm}
+        
+        Так же у \iconTriBotLeft\ и \iconTriBotRight \\ 
+        \vspace{0.2cm}
+        получим \lineYellowBD\ = \lineYellowCE, \\
+        \vspace{0.2cm}
+        \angleRedLeft\ = \angleRedRight\ и \lineBlueBE\ = \lineBlueCD, \\
+        \vspace{0.2cm}
+        $\therefore$ \angleYellowArcLeft\ = \angleYellowArcRight\ и \angleYellowFillLeft\ = \angleYellowFillRight\ (пр. I.4), \\ 
+        \vspace{0.2cm}
+        но \iconSectorLeft\ = \iconSectorRight, $\therefore$ \angleBlueLeftFilled\ = \angleBlueRightFilled\ (акс. III).
+    \end{center}
+    
+    \begin{flushright}ч.т.д.\end{flushright}
+
+    \vfill\null
+    \columnbreak
+
+    \vspace*{1cm} 
+    \noindent \hspace{4cm} 
+    \begin{tikzpicture}[scale=1]
+        
+        \coordinate (A) at (0, 5);
+        \coordinate (E) at (-2.5, 0);
+        \coordinate (D) at (2.5, 0);
+        \coordinate (C) at (-1.3, 2.4);
+        \coordinate (B) at (1.3, 2.4);
+
+Антон, [29.12.2025 21:56]
+\draw pic[fill=black, angle radius=0.9cm] {angle = C--A--B};
+        
+        \draw pic[fill=triBlue, angle radius=0.9cm] {angle = A--B--C};
+        \draw pic[fill=triBlue, angle radius=0.9cm] {angle = B--C--A};
+        
+        \draw pic[fill=triRed, angle radius=1.1cm] {angle = B--E--C};
+        \draw pic[fill=triRed, angle radius=1.1cm] {angle = B--D--C};
+        
+        \draw pic[draw=triYellow, line width=1.5mm, angle radius=0.9cm] {angle = E--C--B};
+        \draw pic[draw=triYellow, line width=1.5mm, angle radius=0.9cm] {angle = C--B--D};
+
+        \draw[triBlue, line width=1.8mm] (C) -- (D);
+        \draw[triBlue, line width=1.8mm] (B) -- (E);
+
+        \draw[triYellow, line width=1.8mm] (C) -- (E);
+        \draw[triYellow, line width=1.8mm] (B) -- (D);
+
+        \draw[triRed, line width=1.8mm] (A) -- (C);
+        \draw[triRed, line width=1.8mm] (A) -- (B);
+
+        \draw[black, line width=1.8mm] (C) -- (B);
+
+        \node[scale=0.9, anchor=south, yshift=2mm] at (A) {A};
+        \node[scale=0.9, anchor=east, xshift=-2mm] at (C) {C};
+        \node[scale=0.9, anchor=west, xshift=2mm] at (B) {B};
+        \node[scale=0.9, anchor=north, yshift=-2mm] at (E) {E};
+        \node[scale=0.9, anchor=north, yshift=-2mm] at (D) {D};
+        
+    \end{tikzpicture}
+    
+\end{multicols}
+\end{document}
