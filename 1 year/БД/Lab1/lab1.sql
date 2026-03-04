@@ -29,27 +29,27 @@ CREATE TABLE Location (ID INT PRIMARY KEY DEFAULT nextval('location_seq'), Name 
 
 CREATE TABLE Person (ID INT PRIMARY KEY DEFAULT nextval('person_seq'),Name VARCHAR(20) NOT NULL, Gender VARCHAR(1) CHECK (Gender IN ('M', 'F')), Emotion VARCHAR(50), LocationID INT NOT NULL REFERENCES Location(ID));
 
-CREATE TABLE Meeting (ID INT PRIMARY KEY DEFAULT nextval('meeting_seq'), LocationID INT NOT NULL REFERENCES Location(ID), Purpose TEXT, StartTime TIMESTAMP NOT NULL CHECK (StartTime >= CURRENT_TIMESTAMP), EndTime TIMESTAMP CHECK (EndTime >= StartTime AND (EndTime >= CURRENT_TIMESTAMP)));
+CREATE TABLE Meeting (ID INT PRIMARY KEY DEFAULT nextval('meeting_seq'), LocationID INT NOT NULL REFERENCES Location(ID), Purpose TEXT, StartTime TIMESTAMP NOT NULL CHECK, EndTime TIMESTAMP CHECK (EndTime >= StartTime));
 
-CREATE TABLE MeetingRegistration (PersonID INT NOT NULL REFERENCES Person(ID), MeetingID INT NOT NULL REFERENCES Meeting(ID), PlannedTime TIMESTAMP CHECK (PlannedTime >= CURRENT_TIMESTAMP), Role VARCHAR(50), PRIMARY KEY (PersonID, MeetingID));
+CREATE TABLE MeetingRegistration (PersonID INT NOT NULL REFERENCES Person(ID), MeetingID INT NOT NULL REFERENCES Meeting(ID), PlannedTime TIMESTAMP CHECK (PlannedTime >= StartTime AND PlannedTime <= EndTime), Role VARCHAR(50), PRIMARY KEY (PersonID, MeetingID));
 
-CREATE TABLE MeetingStatus (ID INT PRIMARY KEY DEFAULT nextval('meetingstatus_seq'), MeetingID INT NOT NULL REFERENCES Meeting(ID), Status VARCHAR(50) NOT NULL, ChangeDate TIMESTAMP NOT NULL CHECK (ChangeDate >= CURRENT_TIMESTAMP));
+CREATE TABLE MeetingStatus (ID INT PRIMARY KEY DEFAULT nextval('meetingstatus_seq'), MeetingID INT NOT NULL REFERENCES Meeting(ID), Status VARCHAR(50) NOT NULL, ChangeDate TIMESTAMP NOT NULL CHECK (ChangeDate <= CURRENT_TIMESTAMP));
 
 
-INSERT INTO Country (Id, Name, Population, Continent) VALUES (1, 'Россия', 140000000, 'Европа');
+INSERT INTO Country (Name, Population, Continent) VALUES ('Россия', 140000000, 'Европа');
 
-INSERT INTO Capital (Id, Name, Population, CountryID) VALUES (1, 'Москва', 12000000, 1);
+INSERT INTO Capital (Name, Population, CountryID) VALUES ('Москва', 12000000, 1);
 
-INSERT INTO City (Id, Name, Population, IsCapital, CountryID) VALUES (1, 'Сургут', 400000, FALSE, 1);
+INSERT INTO City (Name, Population, IsCapital, CountryID) VALUES ('Сургут', 400000, FALSE, 1);
 
-INSERT INTO Street (Id, Name, PostalCode, CityID) VALUES (1, 'Центральный тротуар', '000001', 1);
+INSERT INTO Street (Name, PostalCode, CityID) VALUES ('Центральный тротуар', '000001', 1);
 
-INSERT INTO Location (Id, Name, Type, StreetID) VALUES (1, 'Место встречи на краю города', 'Открытое пространство', 1);
+INSERT INTO Location (Name, Type, StreetID) VALUES ('Место встречи на краю города', 'Открытое пространство', 1);
 
-INSERT INTO Person (Id, Name, Gender, Emotion, LocationID) VALUES (1, 'Олвин', 'M', 'Нетерпеливый', 1), (2, 'Хедрон', 'M', 'Спокойный', 1), (3, 'Шут', 'M', 'Веселый', 1);
+INSERT INTO Person (Name, Gender, Emotion, LocationID) VALUES ('Олвин', 'M', 'Нетерпеливый', 1), (2, 'Хедрон', 'M', 'Спокойный', 1), (3, 'Шут', 'M', 'Веселый', 1);
 
-INSERT INTO Meeting (Id, LocationID, Purpose, StartTime, EndTime) VALUES (1, 1, 'Личная встреча и приветствие', '2026-03-02 10:00:00', '2026-03-02 10:30:00');
+INSERT INTO Meeting (LocationID, Purpose, StartTime, EndTime) VALUES (1, 'Личная встреча и приветствие', '2026-03-02 10:00:00', '2026-03-02 10:30:00');
 
 INSERT INTO MeetingRegistration (PersonID, MeetingID, PlannedTime, Role) VALUES (1, 1, '2026-03-02 09:50:00', 'Участник'), (2, 1, '2026-03-02 10:00:00', 'Участник'), (3, 1, '2026-03-02 10:00:00', 'Организатор');
 
-INSERT INTO MeetingStatus (Id, MeetingID, Status, ChangeDate) VALUES (1, 1, 'Запланирована', '2026-03-01 12:00:00'), (2, 1, 'Проведена', '2026-03-02 10:30:00');
+INSERT INTO MeetingStatus (MeetingID, Status, ChangeDate) VALUES (1, 'Запланирована', '2020-03-01 12:00:00');
