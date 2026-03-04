@@ -8,6 +8,15 @@ DROP TABLE IF EXISTS City CASCADE;
 DROP TABLE IF EXISTS Capital CASCADE;
 DROP TABLE IF EXISTS Country CASCADE;
 
+DROP SEQUENCE IF EXISTS country_seq CASCADE;
+DROP SEQUENCE IF EXISTS capital_seq CASCADE;
+DROP SEQUENCE IF EXISTS city_seq CASCADE;
+DROP SEQUENCE IF EXISTS street_seq CASCADE;
+DROP SEQUENCE IF EXISTS location_seq CASCADE;
+DROP SEQUENCE IF EXISTS person_seq CASCADE;
+DROP SEQUENCE IF EXISTS meeting_seq CASCADE;
+DROP SEQUENCE IF EXISTS meetingstatus_seq CASCADE;
+
 CREATE SEQUENCE country_seq START 1;
 CREATE SEQUENCE capital_seq START 1;
 CREATE SEQUENCE city_seq START 1;
@@ -29,9 +38,9 @@ CREATE TABLE Location (ID INT PRIMARY KEY DEFAULT nextval('location_seq'), Name 
 
 CREATE TABLE Person (ID INT PRIMARY KEY DEFAULT nextval('person_seq'),Name VARCHAR(20) NOT NULL, Gender VARCHAR(1) CHECK (Gender IN ('M', 'F')), Emotion VARCHAR(50), LocationID INT NOT NULL REFERENCES Location(ID));
 
-CREATE TABLE Meeting (ID INT PRIMARY KEY DEFAULT nextval('meeting_seq'), LocationID INT NOT NULL REFERENCES Location(ID), Purpose TEXT, StartTime TIMESTAMP NOT NULL CHECK, EndTime TIMESTAMP CHECK (EndTime >= StartTime));
+CREATE TABLE Meeting (ID INT PRIMARY KEY DEFAULT nextval('meeting_seq'), LocationID INT NOT NULL REFERENCES Location(ID), Purpose TEXT, StartTime TIMESTAMP NOT NULL, EndTime TIMESTAMP CHECK (EndTime >= StartTime));
 
-CREATE TABLE MeetingRegistration (PersonID INT NOT NULL REFERENCES Person(ID), MeetingID INT NOT NULL REFERENCES Meeting(ID), PlannedTime TIMESTAMP CHECK (PlannedTime >= StartTime AND PlannedTime <= EndTime), Role VARCHAR(50), PRIMARY KEY (PersonID, MeetingID));
+CREATE TABLE MeetingRegistration (PersonID INT NOT NULL REFERENCES Person(ID), MeetingID INT NOT NULL REFERENCES Meeting(ID), PlannedTime TIMESTAMP, Role VARCHAR(50), PRIMARY KEY (PersonID, MeetingID));
 
 CREATE TABLE MeetingStatus (ID INT PRIMARY KEY DEFAULT nextval('meetingstatus_seq'), MeetingID INT NOT NULL REFERENCES Meeting(ID), Status VARCHAR(50) NOT NULL, ChangeDate TIMESTAMP NOT NULL CHECK (ChangeDate <= CURRENT_TIMESTAMP));
 
@@ -46,7 +55,7 @@ INSERT INTO Street (Name, PostalCode, CityID) VALUES ('Центральный т
 
 INSERT INTO Location (Name, Type, StreetID) VALUES ('Место встречи на краю города', 'Открытое пространство', 1);
 
-INSERT INTO Person (Name, Gender, Emotion, LocationID) VALUES ('Олвин', 'M', 'Нетерпеливый', 1), (2, 'Хедрон', 'M', 'Спокойный', 1), (3, 'Шут', 'M', 'Веселый', 1);
+INSERT INTO Person (Name, Gender, Emotion, LocationID) VALUES ('Олвин', 'M', 'Нетерпеливый', 1), ('Хедрон', 'M', 'Спокойный', 1), ('Шут', 'M', 'Веселый', 1);
 
 INSERT INTO Meeting (LocationID, Purpose, StartTime, EndTime) VALUES (1, 'Личная встреча и приветствие', '2026-03-02 10:00:00', '2026-03-02 10:30:00');
 
