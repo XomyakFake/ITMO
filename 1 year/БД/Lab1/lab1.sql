@@ -18,13 +18,13 @@ CREATE TABLE Street (ID INT PRIMARY KEY, Name VARCHAR(50) NOT NULL, PostalCode V
 
 CREATE TABLE Location (ID INT PRIMARY KEY, Name VARCHAR(50) NOT NULL, Type VARCHAR(50) NOT NULL, Coordinates VARCHAR(100), StreetID INT REFERENCES Street(ID));
 
-CREATE TABLE Person (ID INT PRIMARY KEY,Name VARCHAR(20) NOT NULL, Gender VARCHAR(1) CHECH IN ('M', 'F'), Emotion VARCHAR(50), LocationID INT NOT NULL REFERENCES Location(ID));
+CREATE TABLE Person (ID INT PRIMARY KEY,Name VARCHAR(20) NOT NULL, Gender VARCHAR(1) CHECK IN ('M', 'F'), Emotion VARCHAR(50), LocationID INT NOT NULL REFERENCES Location(ID));
 
 CREATE TABLE Meeting (ID INT PRIMARY KEY, LocationID INT NOT NULL REFERENCES Location(ID), Purpose TEXT, StartTime TIMESTAMP NOT NULL, EndTime TIMESTAMP CHECK (EndTime >= StartTime));
 
 CREATE TABLE MeetingRegistration (PersonID INT NOT NULL REFERENCES Person(ID), MeetingID INT NOT NULL REFERENCES Meeting(ID), PlannedTime TIMESTAMP, Role VARCHAR(50), PRIMARY KEY (PersonID, MeetingID));
 
-CREATE TABLE MeetingStatus (ID INT PRIMARY KEY, MeetingID INT NOT NULL REFERENCES Meeting(ID), Status NOT NULL VARCHAR(50), ChangeDate NOT NULL TIMESTAMP);
+CREATE TABLE MeetingStatus (ID INT PRIMARY KEY, MeetingID INT NOT NULL REFERENCES Meeting(ID), Status NOT NULL VARCHAR(50), ChangeDate TIMESTAMP NOT NULL);
 
 
 INSERT INTO Country (Id, Name, Population, Continent) VALUES (1, 'Россия', 140000000, 'Европа');
@@ -37,10 +37,10 @@ INSERT INTO Street (Id, Name, PostalCode, CityID) VALUES (1, 'Центральн
 
 INSERT INTO Location (Id, Name, Type, StreetID) VALUES (1, 'Место встречи на краю города', 'Открытое пространство', 1);
 
-INSERT INTO Person (Id, Name, Gender, Emotions, LocationID) VALUES (1, 'Олвин', 'M', 'Нетерпеливый', 1), (2, 'Хедрон', 'M', 'Спокойный', 1), (3, 'Шут', 'M', 'Веселый', 1);
+INSERT INTO Person (Id, Name, Gender, Emotion, LocationID) VALUES (1, 'Олвин', 'M', 'Нетерпеливый', 1), (2, 'Хедрон', 'M', 'Спокойный', 1), (3, 'Шут', 'M', 'Веселый', 1);
 
 INSERT INTO Meeting (Id, LocationID, Purpose, StartTime, EndTime) VALUES (1, 1, 'Личная встреча и приветствие', '2026-03-02 10:00:00', '2026-03-02 10:30:00');
 
-INSERT INTO MeetingRegistration (PersonID, MeetingID, PlannedArrival, Role) VALUES (1, 1, '2026-03-02 09:50:00', 'Участник'), (2, 1, '2026-03-02 10:00:00', 'Участник'), (3, 1, '2026-03-02 10:00:00', 'Организатор');
+INSERT INTO MeetingRegistration (PersonID, MeetingID, PlannedTime, Role) VALUES (1, 1, '2026-03-02 09:50:00', 'Участник'), (2, 1, '2026-03-02 10:00:00', 'Участник'), (3, 1, '2026-03-02 10:00:00', 'Организатор');
 
 INSERT INTO MeetingStatus (Id, MeetingID, Status, ChangeDate) VALUES (1, 1, 'Запланирована', '2026-03-01 12:00:00'), (2, 1, 'Проведена', '2026-03-02 10:30:00');
