@@ -30,7 +30,7 @@ SYM1:   IN  3
 
        	LOOP CNT
         JUMP SYM2
-	JUMP DONE
+	    JUMP DONE
 
 SYM2:   IN  3
         AND #0x40
@@ -41,7 +41,7 @@ SYM2:   IN  3
 
        	LOOP CNT
         JUMP NEXT
-	JUMP DONE
+	    JUMP DONE
 
 DONE:   HLT
 
