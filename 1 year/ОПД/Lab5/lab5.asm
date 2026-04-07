@@ -3,10 +3,11 @@ ORG 0x410
 ADR:    WORD $RES
 CNT:    WORD 0
 TEMP:   WORD 0
+MASK:   WORD 0x00FF 
 
 START:  CLA
         LD  (ADR)+
-        AND #0xFF
+        AND MASK
         ST  CNT
 
 LEN:    IN  3
