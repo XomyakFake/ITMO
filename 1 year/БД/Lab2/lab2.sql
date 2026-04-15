@@ -172,12 +172,18 @@ WHERE NOT EXISTS (
 /* 8. В алфавитном порядке вывести список городов у которых не меньше 3х улиц и на которых за последние 2 года было не именее 10 встреч. */
 SELECT City.Name FROM City 
 JOIN Street ON Street.CityID = City.ID
+JOIN (
+SELECT Street.ID FROM Street
 JOIN Location ON Location.StreetID = Street.ID
 JOIN Meeting ON Meeting.LocationID = Location.ID
 WHERE Meeting.StartTime >= NOW() - INTERVAL '2 years'
+GROUP BY Street.ID
+HAVING COUNT(Meeting.ID) >= 10 
+) AS GoodStreet ON Street.ID = GoodStreet.ID
 GROUP BY City.Name
-HAVING COUNT(Street.ID) >= 3 AND COUNT(Meeting.ID) >= 10
-ORDER BY City.Name;
+HAVING COUNT(Street.ID) >= 3 
+ORDER BY City.Name; 
+
 /* 
 Результат:
        name  
