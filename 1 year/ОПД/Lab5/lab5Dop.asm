@@ -12,11 +12,9 @@ DAY:    WORD 0
 MON:    WORD 0
 SMILE:  WORD 0x3A28
 SMILF:  WORD 0x0A
-NUMNUM: WORD 0
-NUMNUM2: WORD 0
 
 PRTMP: WORD 0
-
+DAYNUM: WORD 0
 
 MOFFADR: WORD $MOFF
 DTABADR: WORD $DTAB
@@ -65,7 +63,7 @@ CKDOT:  LD   CH_TMP
 
 CKDIG:  LD   CH_TMP
         CMP  #0x30       ; '0' = 0x30
-        BСS  INLOOP      ; меньше '0' — игнорируем
+        BCS  INLOOP      ; меньше '0' — игнорируем
         CMP  #0x39       ; '9' = 0x39
         BCC INLOOP      ; больше '9' — игнорируем (BHIS = >=, т.е. > 0x39 не пройдёт)
 
@@ -201,7 +199,7 @@ W2:     IN   0x0D
         AND  #0x40
         BEQ  W2
         OUT  0x0C        
-        JUMP PRNT
+        JUMP PRINT
       
 
 PEND:   HLT
@@ -219,8 +217,8 @@ WE2:    IN   0x0D
         OUT  0x0C    
         HLT
 
-
-
+NUMNUM:  WORD 0
+NUMNUM2: WORD 0
 ORG 0x300
 MUL10:  LD   NUMNUM     ; берём число
         ASL             ; *2
