@@ -81,6 +81,7 @@ INT3:
   NOP
   CALL CHECK
   ST X
+  NOP
   IRET
   
   
