@@ -1,5 +1,5 @@
 ORG 0x100
-; === ПЕРЕМЕННЫЕ ===
+
 LEN:     WORD 5
 CH0:     WORD 0
 CH1:     WORD 0
@@ -21,13 +21,12 @@ SMILE:   WORD 0x3A28
 SMILF:   WORD 0x0A
 
 
-; === КОД ===
 START:  CLA
 
-INLOOP:
-WAIT8:  IN   0x19
+FIRST:
+WAIT:  IN   0x19
         AND  #0x40
-        BEQ  WAIT8
+        BEQ  WAIT
         IN   0x18
         ST   CH_TMP
         LD   LEN
@@ -37,22 +36,22 @@ WAIT8:  IN   0x19
 
 CKDOT:  LD   CH_TMP
         CMP  #0x2E
-        BNE  INLOOP
+        BNE  FIRST
         JUMP SAVE
 
 CKDIG:  LD   CH_TMP
         CMP  #0x30
-        BLO  INLOOP
+        BLO  FIRST
         CMP  #0x3A
-        BHIS INLOOP
+        BHIS FIRST
 
 SAVE:   LD   CH_TMP
         ST   (PTR)+
         LOOP LEN
-        JUMP INLOOP
-        JUMP AFTERINP
+        JUMP FIRST
+        JUMP SECOND
 
-AFTERINP:
+SECOND:
 WENTER: IN   0x19
         AND  #0x40
         BEQ  WENTER
@@ -97,13 +96,13 @@ VALIDATE:
         BLO  ERROUT
         LD   MON
         CMP  #0x02
-        BNE  NOTFEB
+        BNE  CKMON
         LD   DAY
         CMP  #0x1D
         BHIS ERROUT
         JUMP DATEOK
 
-NOTFEB: LD   MON
+CKMON: LD   MON
         CMP  #0x04
         BEQ  CHK30
         CMP  #0x06
@@ -149,21 +148,25 @@ MOD7DONE:
         ST   STRPTR
 
 PRINT:  LD   (STRPTR)+
-        BEQ  PEND
-        ST   $WTMP     
+        BEQ  DONE
         SWAB
+        ST   WTMP     
+
 W1:     IN   0x0D
         AND  #0x40
         BEQ  W1
+        LD WTMP
         OUT  0x0C      
-        LD   $WTMP   
+
 W2:     IN   0x0D
         AND  #0x40
         BEQ  W2
+        LD WTMP
+        SWAB
         OUT  0x0C        
         JUMP PRINT
 
-PEND:   HLT
+DONE:   HLT
 
 WTMP:   WORD 0 
 
@@ -197,7 +200,7 @@ MUL10:  LD   $NUMNUM
         ST   $NUMNUM
         RET
 
-; === ТАБЛИЦЫ И СТРОКИ ===
+
 MOFF:   WORD 0,31,59,90,120,151,181,212,243,273,304,334
 
 DTAB:   WORD $S_MON
