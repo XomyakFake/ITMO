@@ -70,6 +70,7 @@ INT1:
 
 
 INT3:
+  NOP
   IN 6
   ST TMP
   ASL
@@ -77,6 +78,7 @@ INT3:
   ST TMP
   LD X
   SUB TMP
+  NOP
   CALL CHECK
   ST X
   IRET
