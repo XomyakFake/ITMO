@@ -20,6 +20,7 @@ NUMNUM2: WORD 0
 SMILE:   WORD 0x3A28
 SMILF:   WORD 0x0A
 
+
 ; === КОД ===
 START:  CLA
 
@@ -149,31 +150,40 @@ MOD7DONE:
 
 PRINT:  LD   (STRPTR)+
         BEQ  PEND
+        ST   $WTMP     
         SWAB
 W1:     IN   0x0D
         AND  #0x40
         BEQ  W1
-        OUT  0x0C
-        SWAB
+        OUT  0x0C      
+        LD   $WTMP   
 W2:     IN   0x0D
         AND  #0x40
         BEQ  W2
-        OUT  0x0C
+        OUT  0x0C        
         JUMP PRINT
 
 PEND:   HLT
+
+WTMP:   WORD 0 
 
 ERROUT:
 WE1:    IN   0x0D
         AND  #0x40
         BEQ  WE1
         LD   $SMILE
+        SWAB         
         OUT  0x0C
 WE2:    IN   0x0D
         AND  #0x40
         BEQ  WE2
+        LD   $SMILE
+        OUT  0x0C    
+WE3:    IN   0x0D
+        AND  #0x40
+        BEQ  WE3
         LD   $SMILF
-        OUT  0x0C
+        OUT  0x0C   
         HLT
 
 MUL10:  LD   $NUMNUM
