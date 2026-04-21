@@ -41,9 +41,9 @@ CKDOT:  LD   CH_TMP
 
 CKDIG:  LD   CH_TMP
         CMP  #0x30
-        BLO  FIRST
+        BCC  FIRST
         CMP  #0x3A
-        BHIS FIRST
+        BCs FIRST
 
 SAVE:   LD   CH_TMP
         ST   (PTR)+
@@ -87,19 +87,19 @@ VALIDATE:
         ST   MON
         LD   MON
         CMP  #0x01
-        BLO  ERROUT
+        BCC  ERROUT
         LD   MON
         CMP  #0x0D
-        BHIS ERROUT
+        BCs ERROUT
         LD   DAY
         CMP  #0x01
-        BLO  ERROUT
+        BCC  ERROUT
         LD   MON
         CMP  #0x02
         BNE  CKMON
         LD   DAY
         CMP  #0x1D
-        BHIS ERROUT
+        BCs ERROUT
         JUMP DATEOK
 
 CKMON: LD   MON
@@ -113,12 +113,12 @@ CKMON: LD   MON
         BEQ  CHK30
         LD   DAY
         CMP  #0x20
-        BHIS ERROUT
+        BCs ERROUT
         JUMP DATEOK
 
 CHK30:  LD   DAY
         CMP  #0x1F
-        BHIS ERROUT
+        BCs ERROUT
 
 DATEOK:
         LD   MON
@@ -135,7 +135,7 @@ DATEOK:
 
 MOD7:   LD   WDAY
         CMP  #0x07
-        BLO  MOD7DONE
+        BCC  MOD7DONE
         SUB  #0x07
         ST   WDAY
         JUMP MOD7
