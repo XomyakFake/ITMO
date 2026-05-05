@@ -40,6 +40,7 @@ MAIN:
   INC
   CALL CHECK
   ST X
+  NOP
   EI
   JUMP MAIN
   
