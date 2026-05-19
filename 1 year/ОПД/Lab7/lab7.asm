@@ -8,7 +8,6 @@ ARG1:   WORD 0x0000
 ARG2:   WORD 0x0000
 ARG3:   WORD 0x1234
 ARG4:   WORD 0x5678
-
 START:  CALL TEST1
         CALL TEST2
         LD #0x1
@@ -16,14 +15,13 @@ START:  CALL TEST1
         AND CHECK2
         ST RES
 STOP:   HLT
-
 TEST1:  LD ARG1
         PUSH
         LD ARG2
         PUSH
         PUSHF           
         POP             
-        ST PSOLD        
+        ST PSOLD       
         WORD 0x0F20     ; SWASP
         PUSHF          
         POP             
@@ -37,15 +35,14 @@ TEST1:  LD ARG1
         POP
         CMP ARG2
         BEQ DONE1
-
 ERROR1: CLA
         ST CHECK1
+        HLT
         RET
 DONE1:  LD #0x1
         ST CHECK1
         CLA
         RET
-
 TEST2:  LD ARG3
         PUSH
         LD ARG4
@@ -66,7 +63,6 @@ TEST2:  LD ARG3
         POP
         CMP ARG4
         BEQ DONE2
-
 ERROR2: CLA
         ST CHECK2
         RET
