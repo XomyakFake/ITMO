@@ -1,7 +1,9 @@
 ORG 0x19E
-RES: WORD 0x0000
+RES:    WORD 0x0000
 CHECK1: WORD 0x0000
 CHECK2: WORD 0x0000
+PSOLD:  WORD 0x0000
+PSNEW:  WORD 0x0000
 ARG1:   WORD 0x0000
 ARG2:   WORD 0x0000
 ARG3:   WORD 0x1234
@@ -19,13 +21,23 @@ TEST1:  LD ARG1
         PUSH
         LD ARG2
         PUSH
-        WORD 0x0F20  ;SWASP
+        PUSHF           
+        POP             
+        ST PSOLD        
+        WORD 0x0F20     ; SWASP
+        PUSHF          
+        POP             
+        ST PSNEW        
+        LD PSOLD
+        CMP PSNEW
+        BNE ERROR1     
         POP
-        CMP ARG1       
+        CMP ARG1
         BNE ERROR1
         POP
-        CMP ARG2     
+        CMP ARG2
         BEQ DONE1
+
 ERROR1: CLA
         ST CHECK1
         RET
@@ -38,13 +50,23 @@ TEST2:  LD ARG3
         PUSH
         LD ARG4
         PUSH
-        WORD 0x0F20  ;SWASP
+        PUSHF           
+        POP            
+        ST PSOLD        
+        WORD 0x0F20     ; SWASP
+        PUSHF           
+        POP             
+        ST PSNEW      
+        LD PSOLD
+        CMP PSNEW
+        BNE ERROR2     
         POP
-        CMP ARG3       
+        CMP ARG3
         BNE ERROR2
         POP
-        CMP ARG4      
+        CMP ARG4
         BEQ DONE2
+
 ERROR2: CLA
         ST CHECK2
         RET
