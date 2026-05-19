@@ -37,7 +37,6 @@ TEST1:  LD ARG1
         BEQ DONE1
 ERROR1: CLA
         ST CHECK1
-        HLT
         RET
 DONE1:  LD #0x1
         ST CHECK1
