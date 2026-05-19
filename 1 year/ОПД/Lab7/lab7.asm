@@ -21,15 +21,17 @@ TEST1:  LD ARG1
         PUSH
         LD ARG2
         PUSH
-        PUSHF           
+
+        CLA
+
+        PUSHF   
         POP             
         ST PSOLD       
         WORD 0x0F20     ; SWASP
         PUSHF          
         POP             
         ST PSNEW        
-        LD PSOLD
-        CMP PSNEW
+        CMP PSOLD
         BNE ERROR1     
         POP
         CMP ARG1
@@ -48,15 +50,17 @@ TEST2:  LD ARG3
         PUSH
         LD ARG4
         PUSH
-        PUSHF           
+
+        CLA
+
+        PUSHF    
         POP            
         ST PSOLD        
         WORD 0x0F20     ; SWASP
-        PUSHF           
+        PUSHF  
         POP             
-        ST PSNEW      
-        LD PSOLD
-        CMP PSNEW
+        ST PSNEW        
+        CMP PSOLD
         BNE ERROR2     
         POP
         CMP ARG3
