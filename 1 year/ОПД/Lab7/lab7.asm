@@ -27,6 +27,7 @@ TEST1:  LD ARG1
         CMP ARG2     
         BEQ DONE1
 ERROR1: CLA
+        ST CHECK1
         RET
 DONE1:  LD #0x1
         ST CHECK1
@@ -45,6 +46,7 @@ TEST2:  LD ARG3
         CMP ARG4      
         BEQ DONE2
 ERROR2: CLA
+        ST CHECK2
         RET
 DONE2:  LD #0x1
         ST CHECK2
