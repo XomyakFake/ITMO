@@ -8,8 +8,10 @@ ARG1:   WORD 0x0000
 ARG2:   WORD 0x0000
 ARG3:   WORD 0x1234
 ARG4:   WORD 0x5678
-START:  CALL TEST1
-        CALL TEST2
+
+NTEST1: JUMP TEST1
+NTEST2: JUMP TEST2
+ENND:
         LD #0x1
         AND CHECK1
         AND CHECK2
@@ -37,11 +39,11 @@ TEST1:  LD ARG1
         BEQ DONE1
 ERROR1: CLA
         ST CHECK1
-        RET
+        JUMP NTEST2
 DONE1:  LD #0x1
         ST CHECK1
         CLA
-        RET
+        JUMP NTEST2
 TEST2:  LD ARG3
         PUSH
         LD ARG4
@@ -64,8 +66,8 @@ TEST2:  LD ARG3
         BEQ DONE2
 ERROR2: CLA
         ST CHECK2
-        RET
+        JUMP ENND
 DONE2:  LD #0x1
         ST CHECK2
         CLA
-        RET
+        JUMP ENND
