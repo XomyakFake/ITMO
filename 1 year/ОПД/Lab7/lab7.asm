@@ -2,12 +2,14 @@ ORG 0x19E
 RES:    WORD 0x0000
 CHECK1: WORD 0x0000
 CHECK2: WORD 0x0000
-PSOLD:  WORD 0x0000
-PSNEW:  WORD 0x0000
 ARG1:   WORD 0x0000
 ARG2:   WORD 0x0000
+PS1:    WORD 0x0004
 ARG3:   WORD 0x1234
 ARG4:   WORD 0x5678
+PS2:    WORD 0x0001
+MASK:   WORD 0x000F
+
 
 NTEST1: JUMP TEST1
 NTEST2: JUMP TEST2
@@ -20,18 +22,12 @@ STOP:   HLT
 TEST1:  LD ARG1
         PUSH
         LD ARG2
-        PUSH
-
-        CLA
-
-        PUSHF   
-        POP             
-        ST PSOLD       
+        PUSH   
         WORD 0x0F20     ; SWASP
         PUSHF          
-        POP             
-        ST PSNEW        
-        CMP PSOLD
+        POP       
+        AND MASK    
+        CMP PS1         ;сравниваем с предпологаемой константой PS до микропрограммы
         BNE ERROR1     
         POP
         CMP ARG1
@@ -49,18 +45,12 @@ DONE1:  LD #0x1
 TEST2:  LD ARG3
         PUSH
         LD ARG4
-        PUSH
-
-        CLA
-
-        PUSHF    
-        POP            
-        ST PSOLD        
+        PUSH 
         WORD 0x0F20     ; SWASP
-        PUSHF  
-        POP             
-        ST PSNEW        
-        CMP PSOLD
+        PUSHF          
+        POP      
+        AND MASK       
+        CMP PS2        ;сравниваем с предпологаемой константой PS до микропрограммы
         BNE ERROR2     
         POP
         CMP ARG3
