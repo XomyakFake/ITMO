@@ -37,13 +37,13 @@ INSERT INTO Person (Name, Gender, LocationID) VALUES ('Иван', 'M', 1);
 INSERT INTO Person (Name, Gender, LocationID) VALUES ('Маша', 'F', 1);
 
 INSERT INTO Meeting (LocationID, Purpose, StartTime, EndTime) 
-VALUES (1, 'Утренний созвон', '2026-05-24 10:00:00', '2026-05-24 11:00:00');
+VALUES (1, 'Утренний созвон', '2026-05-27 10:00:00', '2026-05-27 11:00:00');
 
 INSERT INTO Meeting (LocationID, Purpose, StartTime, EndTime) 
-VALUES (1, 'Вечерний созвон', '2026-05-24 18:00:00', '2026-05-24 20:00:00');
+VALUES (1, 'Вечерний созвон', '2026-05-27 19:00:00', '2026-05-27 20:00:00');
 
 INSERT INTO Meeting (LocationID, Purpose, StartTime, EndTime) 
-VALUES (1, 'Вечерний созвон №2', '2026-05-24 18:30:00', '2026-05-24 20:30:00');
+VALUES (1, 'Вечерний созвон №2', '2026-05-27 19:30:00', '2026-05-27 20:30:00');
 
 
 
@@ -54,6 +54,7 @@ DECLARE
   start_time TIMESTAMP;
   end_time TIMESTAMP;
   flag BOOLEAN;
+  check_flag INT;
 BEGIN
   SELECT StartTime, EndTime, ID
   INTO start_time, end_time, check_flag
