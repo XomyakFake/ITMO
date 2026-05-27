@@ -55,14 +55,15 @@ DECLARE
   end_time TIMESTAMP;
   flag BOOLEAN;
 BEGIN
-  SELECT StartTime, EndTime
-  INTO start_time, end_time
+  SELECT StartTime, EndTime, ID
+  INTO start_time, end_time, check_flag
   FROM Meeting 
   WHERE ID = NEW.MeetingID;
 
-  IF NOT FOUND THEN
+  IF check_flag is NULL THEN
     RAISE EXCEPTION 'Встречи с ID % не существует', NEW.MeetingID;
   END IF;
+
 
   IF end_time < CURRENT_TIMESTAMP THEN
     RAISE EXCEPTION 'Встреча уже завершилась';
