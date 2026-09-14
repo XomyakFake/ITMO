@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web lab 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        :root{
+            --purple: #ffffff;
+            --magenta: #f193f1;
+            --white: #ffffff;
+            --black: #000000;
+            --table-color: #440044;
+            --green: #1cb624;
+            --dark-green: #074102;
+        }
+
+        body{
+            font-family: sans-serif;
+            background-color: var(--purple);
+            color: var(--black);
+        }
+        
+        header {
+            background-color: var(--magenta);
+            display: flex;
+            width: 100%;
+            font-family: fantasy;
+            color: var(--black);
+        }
+
+        /* cелектор дочерних элементов */
+        header > div {
+            border: 1px solid black;
+        }
+
+        header .name-and-group {
+            padding: 12px 16px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+
+        .header-message {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            padding: 8px 16px;
+            color: #991b1b;
+        }
+
+        .header-message[hidden] {
+            display: none;
+        }
+
+        .header-message button {
+            margin-left: auto;
+            background-color: transparent;
+            border: none;
+            color: #991b1b;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+
+
+        header .title-and-variant {
+            width: 300px;
+            padding: 12px 20px;
+            margin-left: auto;
+            font-size: 16px;
+        }
+
+        .layout-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .inputs {
+            background-color: var(--magenta);
+            display: flex;
+            flex-direction: column;
+            place-content: center;
+            margin: 15px;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .x-input, .y-input, .r-input {
+            margin: 8px 0px;
+        }
+
+        /* селектор атрибута */
+        input[type="text"] {
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+
+        /* селектор псевдоэлемента */
+        .inputs h5::before {
+            content: "● ";
+            color: var(--white);
+            font-size: 12px;
+        }
+
+
+        .r-button {
+            margin: 3px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid black;
+            background-color: var(--white);
+            cursor: pointer;
+        }
+
+        /* селектор псевдокласса */
+        .r-button:hover {
+            background-color: var(--green);
+            color: black;
+        }
+
+        .r-button.active {
+            background-color: var(--dark-green);
+            color: var(--white);
+        }
+
+        #submitButton {
+            margin-top: 15px;
+            background-color: var(--green);
+            border: 1px solid black;
+            color: black;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #submitButton:hover {
+            background-color: var(--dark-green);
+        }
+
+        #clearButton {
+            margin-top: 10px;
+            background-color: #dc2626;
+            border: 1px solid black;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #clearButton:hover {
+            background-color: #991b1b;
+        }
+
+        .canvas-cell {
+            text-align: center;
+        }
+
+        #coordinate-plane {
+            background-color: var(--white);
+            border: 2px solid black;
+        }
+
+        .res-table {
+            width: 100%;          
+            border-collapse: collapse; 
+            margin: 20px 0;
+            background-color: var(--magenta);
+            border-radius: 8px;
+            border: 3px solid black;
+            text-align: center;
+        }
+
+        .res-table th, .res-table td {
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="name-and-group">
+        Ефимов Антон Дмитриевич
+        <br>
+        PЗ118
+    </div>
+
+
+    <div id="header-message" class="header-message" role="alert" hidden>
+        <span id="header-message-text"></span>
+        <button id="close-message" type="button">&times;</button>
+    </div>
+
+
+    <div class="title-and-variant">
+        <div class="title">
+            Web Lab 1
+        </div>
+
+        <div class="variant">
+            Var 22629
+        </div>
+    </div>
+</header>
+
+<main>
+    <table class="layout-table">
+        <tr>
+            <td class="inputs-cell">
+                <div class="inputs">
+                    <form id="coords-form" onsubmit="submitForm(event)">
+                        <div class="x-input">
+                            <h5>Выберите X</h5>
+                            <br>
+                            X:
+                            <select id="x-select">
+                                <option value="-4">-4</option>
+                                <option value="-3">-3</option>
+                                <option value="-2">-2</option>
+                                <option value="-1">-1</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+
+                        <div class="y-input">
+                            <br>
+                            <h5>Введите Y</h5>
+                            <br>
+                            <label>
+                                Y:
+                                <input id="YInput" type="number" min="-3" max="3" step="any" placeholder="  from -3 to 3" maxlength="6"/>
+                            </label>
+                        </div>
+
+                        <div class="r-input">
+                            <br>
+                            <h5>Выберите R</h5>
+                            <br>
+                            R:
+                            <button class="r-button" type="button" data-value="1"> 1 </button>
+                            <button class="r-button" type="button" data-value="2"> 2 </button>
+                            <button class="r-button" type="button" data-value="3"> 3 </button>
+                            <button class="r-button" type="button" data-value="4"> 4 </button>
+                            <button class="r-button" type="button" data-value="5"> 5 </button>
+                        </div>
+
+                        <br>
+                        <button id="submitButton" type="submit">
+                            Submit
+                        </button>
+                        <button id="clearButton" type="button">
+                            Очистить таблицу
+                        </button>
+                    </form>
+                </div>
+            </td>
+            <td class="canvas-cell">
+                <canvas id="coordinate-plane" width="300" height="300"></canvas>
+            </td>
+        </tr>
+    </table>
+
+    <table class="res-table">
+        <thead id="table-head">
+            <tr>
+                <th>X</th>
+                <th>Y</th>
+                <th>R</th>
+                <th>Текущее время</th>
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+</main>
+
+<script src="script.js"></script>
+
+
+</body>
+</html>
+
