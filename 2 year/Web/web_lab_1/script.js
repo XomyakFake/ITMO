@@ -7,12 +7,13 @@ r.forEach(button => {
         r.forEach(btn => btn.classList.remove("active"));
         this.classList.add("active");
         selectedR = this.getAttribute("data-value");
+        updateFormState();
         drawCanvas();
     })
 })  
 
 document.getElementById("clearButton").addEventListener("click", clearTable);
-document.getElementById("close-message").addEventListener("click", closeMessage);
+document.getElementById("YInput").addEventListener("input", handleYInput);
 
 const canvas = document.getElementById("coordinate-plane");
 canvas.addEventListener("mousemove", handleCanvasMove);
@@ -22,15 +23,15 @@ canvas.addEventListener("click", handleCanvasClick);
 
 document.addEventListener("DOMContentLoaded", () => {
     loadHistory();
+    updateFormState();
     drawCanvas();
 });
 
 function clearTable(){
-    if(!confirm("Вы действительно хотите очистить всю таблицу?")) return;
-
     document.getElementById("table-body").replaceChildren();
     localStorage.removeItem("points-history");
     savedPoints = [];
+    showMessage("Таблица очищена.");
     drawCanvas();
 }
 
@@ -44,17 +45,58 @@ function closeMessage(){
     document.getElementById("header-message").hidden = true;
 }
 
-
-function submitForm(event){
-    event.preventDefault();
-    const xVal = parseInt(document.getElementById("x-select").value);
+function getValidationError(){
     const yVal = parseFloat(document.getElementById("YInput").value.trim().replace(',', '.'));
     const rVal = parseInt(selectedR);
-    
     let errorStr = "";
 
     if(isNaN(yVal) || !checkY(yVal)) errorStr += "Y должен находиться в диапазоне от (-3, 3).\n";
     if(isNaN(rVal)) errorStr += "R не выбран.\n";
+    return errorStr;
+}
+
+function updateFormState(){
+    const errorStr = getValidationError();
+    updateSubmitState();
+
+    if (errorStr !== "") {
+        showMessage(errorStr);
+    } else {
+        closeMessage();
+    }
+}
+
+function updateSubmitState(){
+    document.getElementById("submitButton").disabled = getValidationError() !== "";
+}
+
+function handleYInput(event){
+    let value = event.target.value
+        .replace(/[^0-9.,-]/g, '')
+        .replace(/(?!^)-/g, '');
+    const separatorIndex = value.search(/[.,]/);
+
+    if (separatorIndex !== -1) {
+        value = value.slice(0, separatorIndex + 1)
+            + value.slice(separatorIndex + 1).replace(/[.,]/g, '');
+    }
+
+    event.target.value = value;
+    updateFormState();
+}
+
+function normalizeYInput(event){
+    event.target.value = event.target.value.replace(',', '.');
+}
+
+function submitForm(event){
+    event.preventDefault();
+    normalizeYInput({target: document.getElementById("YInput")});
+    const xVal = parseInt(document.getElementById("x-select").value);
+    const yVal = parseFloat(document.getElementById("YInput").value.trim().replace(',', '.'));
+    const rVal = parseInt(selectedR);
+    
+    const errorStr = getValidationError();
 
     if(errorStr != ""){
         showMessage(errorStr);
@@ -80,19 +122,50 @@ function checkHit(x, y, r){
 
 function addTableRow(item){
     const tbody = document.getElementById("table-body");
-    const ftime = new Date(item.time).toLocaleString("ru-RU");
+    const ftime = formatGMTTime(new Date(item.time));
     const newRow = document.createElement("tr");
 
     newRow.insertCell().appendChild(document.createTextNode(item.x));
     newRow.insertCell().appendChild(document.createTextNode(item.y));
     newRow.insertCell().appendChild(document.createTextNode(item.r));
-
     newRow.insertCell().appendChild(document.createTextNode(ftime));
 
     let resultCell = newRow.insertCell();
-    resultCell.textContent = item.hit ? "Попал" : "Промах";
+    const status = getPointStatus(item);
+    resultCell.textContent = status.text;
+    resultCell.className = status.className;
 
-    tbody.appendChild(newRow);
+    tbody.insertBefore(newRow, tbody.firstChild);
+}
+
+function getPointStatus(point){
+    const x = Number(point.x);
+    const y = Number(point.y);
+    const rValue = Number(point.r);
+    const isValid = Number.isFinite(x) && x >= -4 && x <= 4
+        && Number.isFinite(y) && y > -3 && y < 3
+        && Number.isFinite(rValue) && [1, 2, 3, 4, 5].includes(rValue);
+
+    if (!isValid) {
+        return {text: "Не валидна", className: "status-invalid"};
+    }
+
+    const hit = checkHit(x, y, rValue);
+    return {text: hit ? "Попал" : "Промах", className: hit ? "status-hit" : "status-miss"};
+}
+
+function formatGMTTime(date){
+    const time = date.toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    });
+    const offset = -date.getTimezoneOffset() / 60;
+    const sign = offset >= 0 ? "+" : "-";
+    return `${time} GMT${sign}${Math.abs(offset)}`;
 }
 
 function saveToStorage(item){
@@ -118,9 +191,7 @@ function getCanvasCoordinates(event){
     const scale = Math.min(canvas.width, canvas.height) / (2 * (currR + 1));
     const x = (event.clientX - rect.left - canvas.width / 2) / scale;
     const y = (canvas.height / 2 - (event.clientY - rect.top)) / scale;
-    const maxX = (canvas.width / 2 - 20) / scale;
-
-    if(y <= -3 || y >= 3 || x < -maxX || x > maxX) return null;
+    if(x < -4 || x > 4 || y <= -3 || y >= 3) return null;
     return {x: Math.round(x * 100) / 100, y: Math.round(y * 100) / 100, r: currR};
 }
 
@@ -143,10 +214,14 @@ function handleCanvasClick(event){
 
 function loadHistory(){
     const history = JSON.parse(localStorage.getItem("points-history") || "[]");
-    savedPoints = history;
-    history.forEach(item => {
+    savedPoints = history.map(item => ({
+        ...item,
+        hit: getPointStatus(item).text === "Попал"
+    }));
+    localStorage.setItem("points-history", JSON.stringify(savedPoints));
+    savedPoints.forEach(item => {
         addTableRow(item);
-    })
+    });
 }
 
 function drawCanvas(x = null, y = null, r = null, isHit = null){
@@ -186,6 +261,21 @@ function drawCanvas(x = null, y = null, r = null, isHit = null){
         ctx.fill();
 
     }
+    ctx.save();
+    ctx.strokeStyle = "#440044";
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(Xcenter - 4 * scale, Ycenter - 3 * scale);
+    ctx.lineTo(Xcenter + 4 * scale, Ycenter - 3 * scale);
+    ctx.moveTo(Xcenter - 4 * scale, Ycenter + 3 * scale);
+    ctx.lineTo(Xcenter + 4 * scale, Ycenter + 3 * scale);
+    ctx.moveTo(Xcenter - 4 * scale, Ycenter - 3 * scale);
+    ctx.lineTo(Xcenter - 4 * scale, Ycenter + 3 * scale);
+    ctx.moveTo(Xcenter + 4 * scale, Ycenter - 3 * scale);
+    ctx.lineTo(Xcenter + 4 * scale, Ycenter + 3 * scale);
+    ctx.stroke();
+    ctx.restore();
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -200,7 +290,6 @@ function drawCanvas(x = null, y = null, r = null, isHit = null){
     drawAxisMarks(ctx, Xcenter, Ycenter, width, height, scale);
 
     ctx.fillStyle = "black";
-    ctx.font = "bold 14px sans-serif";
     ctx.fillText("X", width - 16, Ycenter - 8);
     ctx.fillText("Y", Xcenter + 8, 16);
 

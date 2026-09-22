@@ -1,186 +1,324 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>web lab 1</title>
     <style>
+        :root {
+            --bg-main: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --hit: #10b981;
+            --miss: #f43f5e;
+            --text: #f8fafc;
+            --muted-text: #cbd5e1;
+            --border: #475569;
+            --shadow: 0 8px 24px rgba(2, 6, 23, 0.35);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        :root{
-            --purple: #ffffff;
-            --magenta: #f193f1;
-            --white: #ffffff;
-            --black: #000000;
-            --table-color: #440044;
-            --green: #1cb624;
-            --dark-green: #074102;
+
+        body {
+            min-height: 100vh;
+            padding: 24px;
+            background-color: var(--bg-main);
+            color: var(--text);
+            font-family: Arial, sans-serif;
         }
 
-        body{
-            font-family: sans-serif;
-            background-color: var(--purple);
-            color: var(--black);
-        }
-        
         header {
-            background-color: var(--magenta);
             display: flex;
-            width: 100%;
+            align-items: stretch;
+            max-width: 1200px;
+            min-height: 84px;
+            margin: 0 auto 24px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
             font-family: fantasy;
-            color: var(--black);
+            color: var(--text);
+            font-size: 16px;
         }
 
-        /* cелектор дочерних элементов */
         header > div {
-            border: 1px solid black;
+            border: 0;
+        }
+
+        header .name-and-group,
+        header .title-and-variant {
+            padding: 18px 22px;
         }
 
         header .name-and-group {
-            padding: 12px 16px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
         }
 
+        header .title-and-variant {
+            width: 190px;
+            margin-left: auto;
+            color: var(--muted-text);
+            text-align: right;
+        }
 
+        .title {
+            color: var(--text);
+            font-weight: bold;
+        }
 
         .header-message {
             display: flex;
             flex: 1;
             align-items: center;
-            padding: 8px 16px;
-            color: #991b1b;
+            padding: 12px 20px;
+            color: var(--miss);
+            white-space: pre-line;
+            font-size: 19px
         }
 
         .header-message[hidden] {
             display: none;
         }
 
-        .header-message button {
-            margin-left: auto;
-            background-color: transparent;
-            border: none;
-            color: #991b1b;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-
-
-        header .title-and-variant {
-            width: 300px;
-            padding: 12px 20px;
-            margin-left: auto;
-            font-size: 16px;
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .layout-table {
             width: 100%;
-            margin-top: 10px;
+            border-spacing: 0;
         }
 
-        .inputs {
-            background-color: var(--magenta);
-            display: flex;
-            flex-direction: column;
-            place-content: center;
-            margin: 15px;
-            padding: 10px;
-            border-radius: 15px;
+        .inputs-cell,
+        .canvas-cell {
+            width: 50%;
+            padding: 0 10px 24px;
+            vertical-align: top;
         }
 
-        .x-input, .y-input, .r-input {
-            margin: 8px 0px;
+        .inputs,
+        .canvas-card {
+            min-height: 360px;
+            padding: 24px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
 
-        /* селектор атрибута */
-        input[type="text"] {
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 4px;
+        .canvas-card {
+            min-height: 0;
         }
 
-        /* селектор псевдоэлемента */
+        .inputs h5 {
+            margin-bottom: 10px;
+            color: var(--muted-text);
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
         .inputs h5::before {
             content: "● ";
-            color: var(--white);
-            font-size: 12px;
+            color: var(--primary);
         }
 
+        .x-input,
+        .y-input,
+        .r-input {
+            margin-bottom: 22px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            min-height: 38px;
+            padding: 8px 10px;
+            color: var(--text);
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        button:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .r-button,
+        #submitButton,
+        #clearButton {
+            min-height: 40px;
+            padding: 8px 14px;
+            border: 0;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(2, 6, 23, 0.3);
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
 
         .r-button {
             margin: 3px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid black;
-            background-color: var(--white);
-            cursor: pointer;
+            color: var(--text);
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
         }
 
-        /* селектор псевдокласса */
-        .r-button:hover {
-            background-color: var(--green);
-            color: black;
+        .r-button:hover,
+        .r-button.active {
+            color: var(--text);
+            background-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(2, 6, 23, 0.35);
         }
 
         .r-button.active {
-            background-color: var(--dark-green);
-            color: var(--white);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
+        }
+
+        #submitButton,
+        #clearButton {
+            width: 100%;
+            margin-top: 10px;
+            color: var(--text);
         }
 
         #submitButton {
-            margin-top: 15px;
-            background-color: var(--green);
-            border: 1px solid black;
-            color: black;
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
+            background-color: var(--primary);
         }
 
         #submitButton:hover {
-            background-color: var(--dark-green);
+            background-color: var(--primary-hover);
+        }
+
+        #submitButton:disabled {
+            color: var(--muted-text);
+            background-color: var(--border);
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         #clearButton {
-            margin-top: 10px;
-            background-color: #dc2626;
-            border: 1px solid black;
-            color: white;
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        #clearButton:hover {
-            background-color: #991b1b;
-        }
-
-        .canvas-cell {
-            text-align: center;
+            background-color: var(--miss);
         }
 
         #coordinate-plane {
-            background-color: var(--white);
-            border: 2px solid black;
+            display: block;
+            max-width: 100%;
+            margin: auto;
+            background-color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .res-table {
-            width: 100%;          
-            border-collapse: collapse; 
-            margin: 20px 0;
-            background-color: var(--magenta);
-            border-radius: 8px;
-            border: 3px solid black;
+            width: 100%;
+            overflow: hidden;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
             text-align: center;
         }
 
-        .res-table th, .res-table td {
-            padding: 10px;
-            border: 1px solid black;
+        .res-table th,
+        .res-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .res-table th {
+            color: var(--muted-text);
+            background-color: #263449;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .res-table tbody tr:nth-child(even) {
+            background-color: #243247;
+        }
+
+        .res-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .status-hit,
+        .status-miss {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-hit {
+            color: #a7f3d0;
+            background-color: rgba(16, 185, 129, 0.18);
+        }
+
+        .status-miss {
+            color: #fecdd3;
+            background-color: rgba(244, 63, 94, 0.18);
+        }
+
+        .status-invalid {
+            color: #fde68a;
+            background-color: rgba(245, 158, 11, 0.18);
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 12px;
+            }
+
+            header,
+            .layout-table,
+            .layout-table tbody,
+            .layout-table tr {
+                display: block;
+            }
+
+            header {
+                min-height: 0;
+            }
+
+            header .title-and-variant {
+                width: auto;
+                margin-left: 0;
+            }
+
+            .inputs-cell,
+            .canvas-cell {
+                width: 100%;
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .inputs,
+            .canvas-card {
+                min-height: 0;
+            }
+
+            .res-table {
+                font-size: 13px;
+            }
         }
 
     </style>
@@ -192,13 +330,12 @@
     <div class="name-and-group">
         Ефимов Антон Дмитриевич
         <br>
-        PЗ118
+        PЗ218
     </div>
 
 
-    <div id="header-message" class="header-message" role="alert" hidden>
+    <div id="header-message" class="header-message" hidden>
         <span id="header-message-text"></span>
-        <button id="close-message" type="button">&times;</button>
     </div>
 
 
@@ -242,7 +379,7 @@
                             <br>
                             <label>
                                 Y:
-                                <input id="YInput" type="number" min="-3" max="3" step="any" placeholder="  from -3 to 3" maxlength="6"/>
+                                <input id="YInput" type="text" inputmode="decimal" placeholder="  from -3 to 3" maxlength="6"/>
                             </label>
                         </div>
 
@@ -269,7 +406,9 @@
                 </div>
             </td>
             <td class="canvas-cell">
-                <canvas id="coordinate-plane" width="300" height="300"></canvas>
+                <div class="canvas-card">
+                    <canvas id="coordinate-plane" width="450" height="450"></canvas>
+                </div>
             </td>
         </tr>
     </table>

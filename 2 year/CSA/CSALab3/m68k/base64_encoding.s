@@ -7,14 +7,15 @@ err_msg:         .word  0xCCCCCCCC
     .text
     .org     0x200
 _start:
-    movea.l  output_addr, A3
-    movea.l  input_addr, A2
+    movea.l  0x7D0, A7
+    movea.l  0x84, A3
+    movea.l  0x80, A2
     movea.l  0x40, A0                        ; буфер для чтения
     clr.l    D0                              ; счетчик
 
 read_loop:
-    cmp.l    45, D0
-    bgt      ov_error
+    cmp.l    64, D0
+    bge      ov_error
     move.b   (A2), D1
     and.l    0xFF, D1
     cmp.l    10, D1
@@ -25,8 +26,8 @@ read_loop:
     jmp      read_loop
 
 check_len:
-    cmp.l    45, D0
-    bgt      ov_error
+    cmp.l    64, D0
+    bge      ov_error
 
     movea.l  0x0000, A0
     movea.l  0x40, A1
@@ -187,5 +188,6 @@ end:
     halt
 
 ov_error:
-    move.l   err_msg, (A3)
+    move.l   0xCCCCCCCC, (A3)
     halt
+

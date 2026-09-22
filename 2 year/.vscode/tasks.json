@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build NASM",
+      "type": "shell",
+      "command": "nasm -f elf64 -g \"${file}\" -o \"${fileDirname}/${fileBasenameNoExtension}.o\" && ld -o \"${fileDirname}/${fileBasenameNoExtension}\" \"${fileDirname}/${fileBasenameNoExtension}.o\"",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
