@@ -2,16 +2,25 @@
 .org             0x100
 output_addr:     .word  0x84
 input_addr:      .word  0x80
+buffer:          .word  0x40
 err_msg:         .word  0xCCCCCCCC
+begin_of_stack:  .word 0x7D0
 
     .text
     .org     0x200
 _start:
-    movea.l  0x7D0, A7
-    movea.l  0x84, A3
-    movea.l  0x80, A2
-    movea.l  0x40, A0                        ; буфер для чтения
-    clr.l    D0                              ; счетчик
+    movea.l  begin_of_stack, A7     
+    movea.l  (A7), A7            
+
+    movea.l  output_addr, A3
+    movea.l  (A3), A3               
+
+    movea.l  input_addr, A2
+    movea.l  (A2), A2              
+
+    movea.l  buffer, A0         ; буфер для чтения
+    movea.l  (A0), A0               
+    clr.l    D0         ; счетчик
 
 read_loop:
     cmp.l    64, D0
@@ -29,8 +38,9 @@ check_len:
     cmp.l    64, D0
     bge      ov_error
 
-    movea.l  0x0000, A0
-    movea.l  0x40, A1
+    movea.l  0x00, A0
+    movea.l  buffer, A1
+    movea.l  (A1), A1               ; A1 = 0x40
 
 encode_loop:
     cmp.l    3, D0
@@ -188,6 +198,7 @@ end:
     halt
 
 ov_error:
-    move.l   0xCCCCCCCC, (A3)
+    movea.l  err_msg, A4
+    move.l   (A4), (A3)         
     halt
 

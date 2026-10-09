@@ -2,6 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "PointServer",
+      "request": "launch",
+      "mainClass": "PointServer",
+      "projectName": "2 year_9b00eb6"
+    },
+    {
       "name": "Debug NASM with GDB",
       "type": "cppdbg",
       "request": "launch",

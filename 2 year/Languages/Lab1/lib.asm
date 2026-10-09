@@ -1,10 +1,25 @@
-section .text
+section .data
 %define EXIT_SYSCALL 60
 %define WRITE_SYSCALL 1
 %define READ_SYSCALL 0
 %define STD_OUT 1
 %define STD_IN  0
  
+section .text
+global exit
+global string_length
+global print_string
+global print_char
+global print_newline
+global print_uint
+global print_int
+global string_equals
+global read_char
+global read_word
+global parse_uint
+global parse_int
+global string_copy
+
 ; Принимает код возврата и завершает текущий процесс
 exit: 
     mov rax, EXIT_SYSCALL
@@ -19,7 +34,7 @@ string_length:
         je .end
         inc rax
         jmp .loop
-    .end
+    .end:
         ret
 
 
@@ -91,10 +106,12 @@ print_int:
         mov rdi, "-"
         push rax
         call print_char
-        pop rax
+        mov rax, [rsp]
         neg rax
         mov rdi, rax
         call print_uint
+        pop rax
+        ret
 
 ; Принимает два указателя на нуль-терминированные строки, возвращает 1 если они равны, 0 иначе
 string_equals:
@@ -127,10 +144,15 @@ read_char:
     mov rsi, rsp
     mov rdx, 1
     syscall
+    test rax, rax
+    jle .error
     pop rax
     ret 
 
-
+    .error:
+        xor rax, rax
+        add rsp, 8
+        ret
 
 
 ; Принимает: адрес начала буфера, размер буфера
@@ -247,6 +269,9 @@ parse_int:
     cmp cl, '-'
     je .print_minus             
 
+    cmp cl, '+'
+    je .print_plus
+
     jmp parse_uint            
 
     .print_minus:
@@ -259,7 +284,19 @@ parse_int:
         jz .end
 
         inc rdx             
-        neg rax              
+        neg rax 
+        jmp .end
+
+    .print_plus:
+        inc rdi
+        sub rsp, 8
+        call parse_uint
+        add rsp, 8
+
+        test rdx, rdx
+        jz .end
+
+        inc rdx  
 
     .end:
         ret
@@ -280,13 +317,17 @@ string_copy:
         mov [rsi+rcx], al
 
         test al, al
-        jz .end
+        jz .success
 
         inc rcx
         jmp .loop
 
     .buffer_ov:
         xor rax, rax
+        jmp .end
+    
+    .success:
+        mov rax, rcx
 
     .end:
         ret
